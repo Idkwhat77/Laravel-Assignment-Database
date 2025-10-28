@@ -1,18 +1,17 @@
 <?php
 
-// app/Http/Controllers/HomeController.php
-
 namespace App\Http\Controllers;
 
-use App\Models\Cake; // <-- Import the model
+use App\Models\Experience;
+use App\Models\Project;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        // Remove the array and replace it with this:
-        $cakes = Cake::all();
-
-        return view('home', compact('cakes'));
+        $experiences = Experience::orderBy('start_date', 'desc')->get();
+        $projects = Project::where('featured', true)->get();
+        
+        return view('home', compact('experiences', 'projects'));
     }
 }

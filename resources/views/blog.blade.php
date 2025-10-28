@@ -3,16 +3,26 @@
 @section('title', 'Blog')
 
 @section('content')
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
-        <div class="bg-white rounded-xl shadow-md p-6">
-            <h2 class="text-lg font-semibold text-gray-800 mb-2">🎂 New Cake Designs!</h2>
-            <p class="text-gray-700">Check out our latest character cake creations. Each one is unique and perfect for your next party!</p>
-            <span class="text-xs text-gray-400">Posted Oct 2025</span>
-        </div>
-        <div class="bg-white rounded-xl shadow-md p-6">
-            <h2 class="text-lg font-semibold text-gray-800 mb-2">🧁 Behind the Scenes</h2>
-            <p class="text-gray-700">See how we bake and decorate our cakes. From mixing batter to adding the final touches!</p>
-            <span class="text-xs text-gray-400">Posted Sep 2025</span>
+    <div class="max-w-4xl">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Latest Blog Posts</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+            @forelse($blogs as $blog)
+                <div class="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+                    @if($blog->image)
+                        <img src="{{ asset('images/blog/' . $blog->image) }}" alt="{{ $blog->title }}" class="w-full h-40 object-cover rounded-lg mb-4">
+                    @endif
+                    <h2 class="text-lg font-semibold text-gray-800 mb-2">{{ $blog->title }}</h2>
+                    <p class="text-gray-700 mb-3">{{ $blog->excerpt ?: Str::limit(strip_tags($blog->content), 150) }}</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-gray-400">{{ $blog->published_at->format('M d, Y') }}</span>
+                        <a href="{{ route('blog.show', $blog) }}" class="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition">Read More</a>
+                    </div>
+                </div>
+            @empty
+                <div class="col-span-full text-center py-8">
+                    <p class="text-gray-500">No blog posts available.</p>
+                </div>
+            @endforelse
         </div>
     </div>
 @endsection
